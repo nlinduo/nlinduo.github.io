@@ -598,6 +598,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetY,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.System.Acts.GoToLayout,
+		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.Sprite.Cnds.CompareFrame
 	];
 };
