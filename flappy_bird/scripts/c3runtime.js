@@ -610,6 +610,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Behaviors.Pin.Acts.Pin,
+		C3.Plugins.Sprite.Acts.SetAnimFrame,
+		C3.Plugins.System.Exps.choose,
 		C3.Plugins.System.Cnds.EveryTick,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Sprite.Acts.SetX,
@@ -643,14 +645,15 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetY,
 		C3.Behaviors.scrollto.Acts.Shake,
 		C3.Plugins.Text.Acts.SetOpacity,
-		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.Sprite.Cnds.CompareOpacity,
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.System.Acts.ResetGlobals,
-		C3.Plugins.Sprite.Cnds.CompareFrame
+		C3.Plugins.Sprite.Cnds.CompareFrame,
+		C3.Plugins.System.Cnds.OnLoadFinished,
+		C3.Plugins.System.Acts.Wait
 	];
 };
 self.C3_JsPropNameTable = [
@@ -673,6 +676,8 @@ self.C3_JsPropNameTable = [
 	{МестноеХранилище: 0},
 	{Score: 0},
 	{BestScore: 0},
+	{BG_Load: 0},
+	{Спрайт2: 0},
 	{Speed: 0},
 	{Movement: 0}
 ];
@@ -774,6 +779,10 @@ self.C3_JsPropNameTable = [
 
 	self.C3_ExpressionFuncs = [
 		() => "Score",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(0, 1);
+		},
 		() => 1,
 		p => {
 			const n0 = p._GetNode(0);
@@ -790,7 +799,7 @@ self.C3_JsPropNameTable = [
 		},
 		() => -672,
 		() => 480,
-		() => -900,
+		() => -850,
 		() => 330,
 		() => 0,
 		() => "",
@@ -806,7 +815,7 @@ self.C3_JsPropNameTable = [
 		},
 		p => {
 			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() + 2040);
+			return () => (n0.ExpObject() + 2006);
 		},
 		() => -150,
 		() => 6,
@@ -814,7 +823,7 @@ self.C3_JsPropNameTable = [
 		() => 2,
 		p => {
 			const n0 = p._GetNode(0);
-			return () => C3.lerp(n0.ExpObject(), 150, 0.1);
+			return () => C3.lerp(n0.ExpObject(), 170, 0.1);
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -825,6 +834,14 @@ self.C3_JsPropNameTable = [
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(2, 3);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => C3.lerp(n0.ExpObject(), 290, 0.1);
 		}
 	];
 }
