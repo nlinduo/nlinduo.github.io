@@ -625,6 +625,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Pin.Acts.Pin,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.System.Exps.choose,
+		C3.Plugins.Browser.Acts.ExecJs,
 		C3.Plugins.System.Cnds.EveryTick,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Sprite.Acts.SetX,
@@ -799,6 +800,7 @@ self.C3_JsPropNameTable = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(0, 1);
 		},
+		() => "VK();",
 		() => 1,
 		p => {
 			const n0 = p._GetNode(0);
@@ -874,6 +876,46 @@ self.C3_JsPropNameTable = [
 	};
 	
 	self.C3.ScriptsInEvents = scriptsInEvents;
+}
+
+
+// User script Скрипт.js
+
+// Put any global functions etc. here
+
+runOnStartup(async runtime =>
+{
+	// Code to run on the loading screen
+	
+	src="https://vk.com/js/api/xd_connection.js?2"  
+	const type="text/javascript"
+});
+
+function OnBeforeProjectStart(runtime)
+{
+	// Code to run just before 'On start of layout'
+	// on the first layout. Initial instances are created
+	// and available to use here.
+	
+	runtime.addEventListener("tick", () => Tick(runtime));
+}
+
+VK.api("wall.post", {"message": "Hello!", "v":"5.73"}, function (data) {
+alert("Post ID:" + data.response.post_id);
+});
+
+
+
+function VK(runtime)
+{
+const type="text/javascript"
+  VK(function() {
+     // API initialization succeeded
+     // Your code here
+  }, function() {
+     // API initialization failed
+     // Can reload page here
+}, '5.101');
 }
 
 
