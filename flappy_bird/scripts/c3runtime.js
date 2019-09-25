@@ -533,6 +533,18 @@ self["C3_Shaders"] = {};
 
 'use strict';C3.Plugins.Browser.Exps={URL(){return this._runtime.IsInWorker()?this._initLocationStr:location.toString()},Protocol(){return this._runtime.IsInWorker()?new URL(this._initLocationStr).protocol:location.protocol},Domain(){return this._runtime.IsInWorker()?new URL(this._initLocationStr).hostname:location.hostname},PathName(){return this._runtime.IsInWorker()?new URL(this._initLocationStr).pathname:location.pathname},Hash(){return this._runtime.IsInWorker()?new URL(this._initLocationStr).hash:location.hash},QueryString(){return this._runtime.IsInWorker()?new URL(this._initLocationStr).search:location.search},QueryParam(a){const b=this._runtime.IsInWorker()?new URL(this._initLocationStr).search:location.search,c=RegExp('[?&]'+a+'=([^&]*)').exec(b);return c?decodeURIComponent(c[1].replace(/\+/g,' ')):''},Referrer(){return this._referrer},Title(){return this._docTitle},Language(){return navigator.language},Platform(){return navigator.platform},UserAgent(){return navigator.userAgent},ExecJS(jsStr){let result=0;try{result=eval(jsStr)}catch(a){console.error('Error executing JavaScript: ',a)}return'number'==typeof result||'string'==typeof result?result:'boolean'==typeof result?result?1:0:0},Name(){return navigator.appName},Version(){return navigator.appVersion},Product(){return navigator.product},Vendor(){return navigator.vendor},BatteryLevel(){return 1},BatteryTimeLeft(){return 1/0},Bandwidth(){const a=navigator['connection'];return a?a['downlink']||a['downlinkMax']||a['bandwidth']||1/0:1/0},ConnectionType(){const a=navigator['connection'];return a?a['type']||'unknown':'unknown'},DevicePixelRatio(){return self.devicePixelRatio},ScreenWidth(){return this._screenWidth},ScreenHeight(){return this._screenHeight},WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},WindowInnerHeight(){return this._runtime.GetCanvasManager().GetLastHeight()},WindowOuterWidth(){return this._windowOuterWidth},WindowOuterHeight(){return this._windowOuterWidth}};
 
+"use strict";C3.Plugins.Facebook=class extends C3.SDKPluginBase{constructor(a){super(a)}Release(){super.Release()}};
+
+"use strict";C3.Plugins.Facebook.Type=class extends C3.SDKTypeBase{constructor(a){super(a)}Release(){super.Release()}OnCreate(){}};
+
+"use strict";{C3.Plugins.Facebook.Instance=class extends C3.SDKInstanceBase{constructor(a,b){super(a,"facebook"),this._isAvailable=!1,this._appId="",this._isLoggedIn=!1,this._userId="",this._accessToken="",this._fullName="",this._firstName="",this._lastName="",b&&(this._appId=b[0]);const c=this._runtime.Dispatcher();this._disposables=new C3.CompositeDisposable(C3.Disposable.From(c,"afterfirstlayoutstart",()=>this._OnAfterFirstLayoutStart()),C3.Disposable.From(c,"layoutchange",()=>this._OnLayoutChange())),this.AddDOMMessageHandlers([["login",(a)=>this._OnLogin(a)],["name-available",(a)=>this._OnNameAvailable(a)],["logout",(a)=>this._OnLogout(a)]]),this._runtime.AddLoadPromise(this.PostToDOMAsync("load",{"appId":this._appId}).then((a)=>this._isAvailable=!!a))}Release(){super.Release()}_OnAfterFirstLayoutStart(){this.Trigger(C3.Plugins.Facebook.Cnds.OnReady)}_OnLayoutChange(){this._isLoggedIn&&this.Trigger(C3.Plugins.Facebook.Cnds.OnLogIn),this._fullName&&this.Trigger(C3.Plugins.Facebook.Cnds.OnNameAvailable)}_OnLogin(a){this._isLoggedIn=!0,this._userId=a["userId"],this._accessToken=a["accessToken"],this.Trigger(C3.Plugins.Facebook.Cnds.OnLogIn)}_OnNameAvailable(a){this._fullName=a["fullName"],this._firstName=a["firstName"],this._lastName=a["lastName"],this.Trigger(C3.Plugins.Facebook.Cnds.OnNameAvailable)}_OnLogout(){this._isLoggedIn=!1,this._accessToken="",this._fullName="",this._firstName="",this._lastName="",this.Trigger(C3.Plugins.Facebook.Cnds.OnLogOut)}_OnScoreSubmitted(){this.Trigger(C3.Plugins.Facebook.Cnds.OnScoreSubmitted)}GetAccessToken(){return this._accessToken}}}
+
+"use strict";C3.Plugins.Facebook.Cnds={IsReady(){return this._isAvailable},IsLoggedIn(){return this._isLoggedIn},OnLogIn(){return!0},OnLogOut(){return!0},OnNameAvailable(){return!0},OnReady(){return!0},OnUserTopScoreAvailable(){return!0},OnHiscore(){return!0},OnScoreSubmitted(){return!0}};
+
+"use strict";C3.Plugins.Facebook.Acts={LogIn2(a){!this._isAvailable||this._isLoggedIn||this.PostToDOM("login",{"permissions":a})},LogOut(){this._isAvailable&&this._isLoggedIn&&this.PostToDOM("logout")},PromptWallPost(){this._isAvailable&&this._isLoggedIn&&this.PostToDOM("prompt-wall-post")},PromptToShareApp(){this._isAvailable&&this._isLoggedIn&&this.PostToDOM("prompt-share-app")},PromptToShareLink(a){this._isAvailable&&this._isLoggedIn&&this.PostToDOM("prompt-share-link",{"url":a})},PublishToWall(a){this._isAvailable&&this._isLoggedIn&&this.PostToDOM("publish-to-wall",{"message":a})},PublishLink(a,b,c,d,e,f){this._isAvailable&&this._isLoggedIn&&this.PostToDOM("publish-link",{"message":a,"url":b,"name":c,"caption":d,"description":e,"picture":f})},OnCTAClick(){this.PostToDOM("on-cta-click")},LogIn(){console.warn("[Facebook] Deprecated login action used. Please switch to the new login action.")},PublishScore(){console.warn("[Facebook] The 'Publish score' action is deprecated and no longer has any effect")},RequestUserHiscore(){console.warn("[Facebook] The 'Request user hi-score' action is deprecated and no longer has any effect")},RequestHiscores(){console.warn("[Facebook] The 'Request hi-scores' action is deprecated and no longer has any effect")}};
+
+"use strict";C3.Plugins.Facebook.Exps={FullName(){return this._fullName},FirstName(){return this._firstName},LastName(){return this._lastName},UserIDStr(){return this._userId},UserID(){return 0},Score(){return 0},HiscoreName(){return""},HiscoreUserID(){return 0},HiscoreUserIDStr(){return""},HiscoreRank(){return 0}};
+
 "use strict";C3.Behaviors.scrollto=class extends C3.SDKBehaviorBase{constructor(a){super(a),this._shakeMag=0,this._shakeStart=0,this._shakeEnd=0,this._shakeMode=0}Release(){super.Release()}SetShakeMagnitude(a){this._shakeMag=a}GetShakeMagnitude(){return this._shakeMag}SetShakeStart(a){this._shakeStart=a}GetShakeStart(){return this._shakeStart}SetShakeEnd(a){this._shakeEnd=a}GetShakeEnd(){return this._shakeEnd}SetShakeMode(a){this._shakeMode=a}GetShakeMode(){return this._shakeMode}};
 
 "use strict";C3.Behaviors.scrollto.Type=class extends C3.SDKBehaviorTypeBase{constructor(a){super(a)}Release(){super.Release()}OnCreate(){}};
@@ -620,12 +632,12 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Text,
 		C3.Plugins.LocalStorage,
 		C3.Plugins.Browser,
+		C3.Plugins.Facebook,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Behaviors.Pin.Acts.Pin,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.System.Exps.choose,
-		C3.Plugins.Browser.Acts.ExecJs,
 		C3.Plugins.System.Cnds.EveryTick,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Sprite.Acts.SetX,
@@ -666,7 +678,9 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
+		C3.Plugins.Facebook.Acts.PublishToWall,
 		C3.Plugins.Browser.Acts.GoToURL,
+		C3.Plugins.Facebook.Acts.LogIn2,
 		C3.Plugins.System.Cnds.OnLoadFinished,
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.Browser.Acts.RequestFullScreen
@@ -695,6 +709,7 @@ self.C3_JsPropNameTable = [
 	{BG_Load: 0},
 	{Спрайт2: 0},
 	{Браузер: 0},
+	{Facebook: 0},
 	{Speed: 0},
 	{Movement: 0}
 ];
@@ -800,7 +815,6 @@ self.C3_JsPropNameTable = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(0, 1);
 		},
-		() => "VK();",
 		() => 1,
 		p => {
 			const n0 = p._GetNode(0);
@@ -853,7 +867,12 @@ self.C3_JsPropNameTable = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
 		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (and("Я набрал ", v0.GetValue()) + ", а тебе слабо? Скачивай и попробуй побить мой рекорд!");
+		},
 		() => "https://vk.com/flappybird_vk_exclusive",
+		() => "public_profile",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(2, 3);
@@ -876,46 +895,6 @@ self.C3_JsPropNameTable = [
 	};
 	
 	self.C3.ScriptsInEvents = scriptsInEvents;
-}
-
-
-// User script Скрипт.js
-
-// Put any global functions etc. here
-
-runOnStartup(async runtime =>
-{
-	// Code to run on the loading screen
-	
-	src="https://vk.com/js/api/xd_connection.js?2"  
-	const type="text/javascript"
-});
-
-function OnBeforeProjectStart(runtime)
-{
-	// Code to run just before 'On start of layout'
-	// on the first layout. Initial instances are created
-	// and available to use here.
-	
-	runtime.addEventListener("tick", () => Tick(runtime));
-}
-
-VK.api("wall.post", {"message": "Hello!", "v":"5.73"}, function (data) {
-alert("Post ID:" + data.response.post_id);
-});
-
-
-
-function VK(runtime)
-{
-const type="text/javascript"
-  VK(function() {
-     // API initialization succeeded
-     // Your code here
-  }, function() {
-     // API initialization failed
-     // Can reload page here
-}, '5.101');
 }
 
 
